@@ -18,5 +18,6 @@ export function placeholderClubEmail(clubId: string) {
 export function isPlaceholderEmail(email: string | null | undefined) {
   if (!email) return true;
   const e = email.toLowerCase();
-  return e.endsWith("@example.com") || (e.startsWith("club.") && e.endsWith(`@${STUDENT_DOMAIN}`));
+  // .test is a reserved TLD (RFC 2606) used by the e2e test accounts.
+  return e.endsWith("@example.com") || e.endsWith(".test") || (e.startsWith("club.") && e.endsWith(`@${STUDENT_DOMAIN}`));
 }
