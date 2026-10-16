@@ -1,0 +1,274 @@
+@import "tailwindcss";
+
+/*
+  CampusOne tokens: dark-teal theme with light neumorphism.
+  Colour names describe roles, not hues: one quiet accent, and status
+  colours (good / warn / danger) only where they carry meaning.
+*/
+:root {
+  /* CampusOne dark-teal palette */
+  --teal-950: #031716; /* page background */
+  --teal-900: #032f30; /* sidebar, elevated surfaces */
+  --teal-700: #0a7075; /* secondary accent */
+  --teal-500: #0c969c; /* primary actions */
+  --sky-400: #6ba3be;  /* soft blue accents */
+  --slate-600: #274d60; /* secondary surfaces, muted elements */
+
+  --canvas: var(--teal-950);
+  --surface: #052526;
+  --surface-2: #0a3537;
+  --line: rgb(107 163 190 / 0.12);
+  --ink: #e4eeed;
+  --muted: #8ea8ab;
+  --accent: var(--teal-500);
+  --accent-ink: var(--sky-400);
+  --good: #4cc3a0;
+  --warn: #e0a95c;
+  --danger: #ec6f6a;
+
+  /* Minimal neumorphism: soft dark drop + faint teal top-left lift, hairline edge. */
+  --card-shadow:
+    0 0 0 1px rgb(107 163 190 / 0.08),
+    6px 8px 18px -6px rgb(0 0 0 / 0.55),
+    -3px -3px 10px -4px rgb(12 150 156 / 0.06),
+    inset 0 1px 0 rgb(255 255 255 / 0.03);
+  --pop-shadow:
+    0 0 0 1px rgb(107 163 190 / 0.12),
+    0 18px 40px -12px rgb(0 0 0 / 0.7),
+    inset 0 1px 0 rgb(255 255 255 / 0.04);
+  --inset-shadow:
+    inset 2px 2px 5px rgb(0 0 0 / 0.38),
+    inset -1px -1px 3px rgb(107 163 190 / 0.05);
+  --raise-hover: 0 0 0 1px rgb(12 150 156 / 0.22), 8px 10px 22px -8px rgb(0 0 0 / 0.6);
+}
+
+/*
+  Light theme: same palette, inverted depth. "950" becomes the sunken tone
+  (inputs, tracks) and "900" the raised one (sidebar, preview), so components
+  keep their meaning without any per-component changes. Soft blue darkens
+  for contrast on white.
+*/
+:root[data-theme="light"] {
+  color-scheme: light;
+  --teal-950: #e3eeed;
+  --teal-900: #ffffff;
+  --sky-400: #2c6a86;
+  --slate-600: #c4d8dd;
+
+  --canvas: #eef4f3;
+  --surface: #ffffff;
+  --surface-2: #e6efee;
+  --line: rgb(3 47 48 / 0.1);
+  --ink: #062a2b;
+  --muted: #557275;
+  --accent-ink: #0a7075;
+  --good: #1d8a64;
+  --warn: #a35f0d;
+  --danger: #c43c33;
+
+  --card-shadow:
+    0 0 0 1px rgb(3 47 48 / 0.06),
+    6px 8px 18px -8px rgb(3 47 48 / 0.16),
+    -4px -4px 12px -6px rgb(255 255 255 / 0.9);
+  --pop-shadow:
+    0 0 0 1px rgb(3 47 48 / 0.08),
+    0 18px 40px -14px rgb(3 47 48 / 0.28);
+  --inset-shadow:
+    inset 2px 2px 5px rgb(3 47 48 / 0.1),
+    inset -2px -2px 5px rgb(255 255 255 / 0.85);
+  --raise-hover: 0 0 0 1px rgb(12 150 156 / 0.25), 8px 10px 22px -10px rgb(3 47 48 / 0.22);
+}
+
+/* Applied only for the moment of a theme switch, so the swap eases instead of flashing. */
+.theme-switching,
+.theme-switching * {
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-switching,
+  .theme-switching * {
+    transition: none !important;
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+
+  --shadow-card: var(--card-shadow);
+  --shadow-pop: var(--pop-shadow);
+  --shadow-inset: var(--inset-shadow);
+  --shadow-raise: var(--raise-hover);
+  --color-teal-950: var(--teal-950);
+  --color-teal-900: var(--teal-900);
+  --color-teal-700: var(--teal-700);
+  --color-teal-500: var(--teal-500);
+  --color-sky-soft: var(--sky-400);
+  --color-slate-teal: var(--slate-600);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@theme {
+  /* Strong custom curves; the built-in CSS easings are too weak. */
+  --ease-snappy: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-move: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* ---- Base ---------------------------------------------------------------- */
+
+html {
+  color-scheme: dark;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -200px, rgb(10 112 117 / 0.16), transparent 70%),
+    var(--canvas);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tracking is size-specific: tighten as type grows, leave body at 0. */
+h1 {
+  letter-spacing: -0.022em;
+  line-height: 1.15;
+}
+h2,
+h3 {
+  letter-spacing: -0.012em;
+}
+.display {
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+}
+
+/* Long emails and URLs must wrap instead of pushing siblings off the row. */
+.break-any {
+  overflow-wrap: anywhere;
+}
+
+/* 16px inputs on touch screens so iOS doesn't zoom the page. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ---- Motion -------------------------------------------------------------- */
+
+/* Modal: centred, so it scales from the centre. Transitions + @starting-style stay interruptible. */
+.cc-scrim {
+  opacity: 1;
+  transition: opacity 200ms ease;
+  @starting-style {
+    opacity: 0;
+  }
+}
+.cc-dialog {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 180ms var(--ease-snappy),
+    transform 220ms var(--ease-snappy);
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+.cc-drawer {
+  transform: translateX(0);
+  transition: transform 320ms var(--ease-drawer);
+  @starting-style {
+    transform: translateX(100%);
+  }
+}
+
+.cc-drawer-left {
+  transform: translateX(0);
+  transition: transform 320ms var(--ease-drawer);
+  @starting-style {
+    transform: translateX(-100%);
+  }
+}
+
+/* Popovers that hang off a trigger grow from that corner. */
+.cc-pop {
+  opacity: 0;
+  transform: scale(0.97) translateY(-2px);
+  transform-origin: top right;
+  transition:
+    opacity 140ms ease,
+    transform 160ms var(--ease-snappy);
+  pointer-events: none;
+}
+.group:hover .cc-pop,
+.group:focus-within .cc-pop {
+  opacity: 1;
+  transform: none;
+}
+
+/* One-time list entrance: short stagger, never blocks interaction. */
+@keyframes cc-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.cc-stagger > * {
+  animation: cc-rise 320ms var(--ease-snappy) both;
+}
+.cc-stagger > :nth-child(2) { animation-delay: 40ms; }
+.cc-stagger > :nth-child(3) { animation-delay: 80ms; }
+.cc-stagger > :nth-child(4) { animation-delay: 120ms; }
+.cc-stagger > :nth-child(5) { animation-delay: 160ms; }
+.cc-stagger > :nth-child(6) { animation-delay: 200ms; }
+.cc-stagger > :nth-child(n + 7) { animation-delay: 240ms; }
+
+/* Reduced motion: keep the fades that explain state, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .cc-dialog,
+  .cc-drawer,
+  .cc-drawer-left,
+  .cc-pop {
+    transform: none !important;
+    transition: opacity 150ms ease;
+  }
+  .cc-stagger > * {
+    animation: none;
+  }
+  .active\:scale-\[0\.97\]:active {
+    transform: none;
+  }
+}

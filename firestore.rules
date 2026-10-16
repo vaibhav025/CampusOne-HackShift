@@ -1,0 +1,20 @@
+rules_version = '2';
+
+// All writes go through API routes (Firebase Admin SDK bypasses these rules),
+// so clients only ever read. Calendar refresh tokens are never readable.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    match /clubSecrets/{clubId} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# Never upload secrets or local-only tooling to Vercel.
+# Env vars are set in the Vercel dashboard instead.
+.env
+.env.*
+!.env.example
+service-account.json
+*-firebase-adminsdk-*.json
+.tools/
+.firebase/
+*.log
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
